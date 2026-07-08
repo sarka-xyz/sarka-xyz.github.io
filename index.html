@@ -1,358 +1,146 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SARKA</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&display=swap" rel="stylesheet">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      font-family: "Roboto Flex", sans-serif;
-      font-weight: 650;
-      font-stretch: 151%;
-      letter-spacing: -0.05em;
-      transition: background-color 0.1s ease, color 0.1s ease;
-      position: relative;
-    }
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SARKA</title>
+		<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			html, body {
+			  margin: 0; padding: 0; width: 100%;
+			  font-family: "Roboto Flex", sans-serif; font-weight: 650;
+			  font-stretch: 151%; letter-spacing: -0.05em;
+			  transition: background-color 0.1s ease, color 0.1s ease;
+			  overflow-x: hidden;
+			}
 
-.top-nav {
-  position: fixed;
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 4rem;
-  font-size: 1.1rem;
-  font-weight: 650;
-  z-index: 10;
-  user-select: none;
-}
+		.top-nav {
+		  position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
+		  display: flex; gap: 4rem; font-size: 1.1rem; z-index: 100;
+		  transition: opacity 0.3s ease; user-select: none;
+		}
+		.top-nav.hidden { opacity: 0; pointer-events: none; }
+		.top-nav a { color: inherit; text-decoration: none; }
 
-.top-nav a {
-  color: inherit;
-  text-decoration: none;
-  transition: opacity 0.2s ease;
-}
+		.main-container { padding-top: 150px; display: flex; flex-direction: column; align-items: center; }
 
-.top-nav a:hover {
-  opacity: 0.7;
-}
+		.hero-section { 
+		  display: flex; justify-content: center; align-items: center; 
+		  gap: 40px; padding: 0 40px; margin-bottom: 15px; width: fit-content;
+		}
+		
+		.content { text-align: left; line-height: 1.4; font-size: 1.4rem; width: 250px; }
+		.content a { color: inherit; font-weight: 1000; text-decoration: underline; }
 
+		.video-wrapper { width: 40vw; max-width: 600px; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 6px; }
+		.video-wrapper video { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
 
-    .content {
-      position: absolute;
-      top: 50%;
-      left: 25vw;
-      transform: translate(-50%, -50%);
-      text-align: left;
-      line-height: 1.5;
-      font-size: 1.8rem;
-      font-weight: 650;
-      user-select: none;
-    }
+		.bio-section { width: 70%; max-width: 800px; margin: 50px 15% 100px 15%; display: flex; gap: 4rem; }
+		.bio-header { font-size: 1.5rem; min-width: 100px; }
+		.bio-text { font-size: 1rem; line-height: 1.6; text-wrap: pretty;}
 
-    .content a {
-      color: inherit;
-      font-weight: 1000;
-      text-decoration: underline;
-    }
+		.light-theme { background-color: #0033cc; color: #FCE300; }
+		.dark-theme { background-color: #FCE300; color: #0033cc; }
+		.light-theme .video-wrapper video, .light-theme .logo { filter: invert(1); }
+		
+		.logo { position: fixed; top: 30px; left: 40px; height: 1.5rem; z-index: 101; }
+		.lang-switch { position: fixed; top: 30px; right: 40px; z-index: 101; cursor: pointer; }
+		.lang-active { text-decoration: underline; }
 
-    .content2 {
-      position: absolute;
-      bottom: 50px;
-      right: 40px;
-      font-size: 0.8rem;
-      user-select: none;
-      line-height: 1.6;
-      color: inherit;
-      pointer-events: none;
-    }
-
-    .light-theme {
-      background-color: #ffffff;
-      color: #000000;
-    }
-
-    .dark-theme {
-      background-color: #000000;
-      color: #ffffff;
-    }
-
-    .video-wrapper {
-      position: absolute;
-      top: 50%;
-      left: 75vw;
-      transform: translate(-50%, -50%);
-      width: 40vw;
-      max-width: 600px;
-      aspect-ratio: 16 / 9;
-      overflow: hidden;
-      pointer-events: none;
-      border-radius: 6px;
-    }
-
-    .video-wrapper video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 6px;
-    }
-
-    .light-theme .video-wrapper video {
-      filter: invert(1);
-    }
-
-    .logo {
-      position: absolute;
-      top: 30px;
-      left: 40px;
-      height: 1.5rem;
-      pointer-events: none;
-    }
-
-    .light-theme .logo {
-      filter: invert(1);
-    }
-
-    .dark-theme .logo {
-      filter: invert(0);
-    }
-
-    .lang-switch {
-      position: absolute;
-      top: 30px;
-      right: 40px;
-      color: inherit;
-      user-select: none;
-    }
-
-    .lang {
-      cursor: pointer;
-      padding: 0 4px;
-    }
-
-    .lang-active {
-      text-decoration: underline;
-    }
-
-    .lang:hover {
-      opacity: 0.7;
-    }
-  </style>
-
-<style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100vh; /* Changed from height: 100vh to allow scrolling on small phones */
-    font-family: "Roboto Flex", sans-serif;
-    font-weight: 650;
-    font-stretch: 151%;
-    letter-spacing: -0.05em;
-    transition: background-color 0.1s ease, color 0.1s ease;
-    position: relative;
-    overflow-x: hidden; /* Prevent horizontal wobbling */
-  }
-
-  /* Desktop layout (default) */
-  .top-nav {
-    position: fixed;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 4rem;
-    font-size: 1.1rem;
-    z-index: 10;
-    user-select: none;
-  }
-
-  .top-nav a {
-    color: inherit;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-  }
-
-  .content {
-    position: absolute;
-    top: 50%;
-    left: 25vw;
-    transform: translate(-50%, -50%);
-    text-align: left;
-    line-height: 1.5;
-    font-size: 1.8rem;
-    user-select: none;
-  }
-
-  .video-wrapper {
-    position: absolute;
-    top: 50%;
-    left: 75vw;
-    transform: translate(-50%, -50%);
-    width: 40vw;
-    max-width: 600px;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-    pointer-events: none;
-    border-radius: 6px;
-  }
-
-  /* ... Keep your existing .logo, .lang-switch, and theme classes ... */
-  .logo { position: absolute; top: 30px; left: 40px; height: 1.5rem; z-index: 11; }
-  .lang-switch { position: absolute; top: 30px; right: 40px; z-index: 11; cursor: pointer; }
-  .content2 { position: fixed; bottom: 20px; right: 20px; font-size: 0.8rem; opacity: 0.5; }
-  .video-wrapper video { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
-  .light-theme { background-color: #ffffff; color: #000000; }
-  .dark-theme { background-color: #000000; color: #ffffff; }
-  .light-theme .video-wrapper video, .light-theme .logo { filter: invert(1); }
-  .lang-active { text-decoration: underline; }
-
-  /* MOBILE RESPONSIVENESS */
-  @media (max-width: 768px) {
-    html, body {
-      overflow-y: auto; /* Allow scrolling on mobile */
-    }
-
-    .top-nav {
-      top: 80px; /* Move nav down to avoid hitting the logo/lang-switch */
-      gap: 1.5rem;
-      width: 100%;
-      justify-content: center;
-    }
-
-    .content {
-      position: relative;
-      top: 0;
-      left: 0;
-      transform: none;
-      margin: 140px 40px 40px 40px; /* Spacing for the header */
-      font-size: 1.4rem;
-      width: auto;
-    }
-
-    .video-wrapper {
-      position: relative;
-      top: 0;
-      left: 0;
-      transform: none;
-      width: calc(100% - 80px); /* Full width minus margins */
-      margin: 0 40px 100px 40px;
-      max-width: none;
-    }
-    
-    .logo { left: 20px; top: 20px; }
-    .lang-switch { right: 20px; top: 20px; }
-  }
-</style>
-
+		@media (max-width: 768px) {
+		  .top-nav { top: 80px; gap: 1.5rem; }
+		  .main-container { padding-top: 150px; }
+		  .hero-section { flex-direction: column; gap: 40px; width: 90%; }
+		  .content { width: 100%; }
+		  .bio-section { flex-direction: column; gap: 1rem; width: 85%; }
+		  .video-wrapper { width: 100%; }
+		}
+	</style>
 </head>
 <body class="light-theme">
+	<nav class="top-nav" data-lang-en="Home,Music,Portfolio" data-lang-gr="Αρχική,Μουσική,Πορτφόλιο">
+		<a href="index.html">Home</a>
+		<a href="music.html">Music</a>
+		<a href="https://www.behance.net/feimixyz" target="_blank" rel="noopener">Portfolio</a>
+	</nav>
 
-  <nav class="top-nav" data-lang-en="Home,Music,Portfolio" data-lang-gr="Αρχική,Μουσική,Πορτφόλιο">
-    <a href="index.html">Home</a>
-    <a href="music.html">Music</a>
-    <a href="https://www.behance.net/feimixyz" target="_blank" rel="noopener">Portfolio</a>
-  </nav>
-
-  <img src="sarka-logo.svg" alt="SARKA logo" class="logo" />
-  <div class="content"
-    data-lang-en="
-	Feymi/SARKA<br />
-	Thessaloniki<br /><br />
-	Graphic Designer<br />
-	Music Producer<br /><br />
-	<a href='hire.html'>Hire me</a>"
-	
-    data-lang-gr="
-	Φεϊμί/ΣΑΡΚΑ<br />
-	Θεσσαλονίκη<br /><br />
-	Γραφίστας<br />
-	Μουσικός Παραγώγος<br /><br />
-	<a href='hire.html'>Προσλάβετέ με</a>">
+	<img src="sarka-logo.svg" alt="SARKA logo" class="logo" />
     
-	Feymi/SARKA<br />
-	Thessaloniki<br /><br />
-    Graphic Designer<br />
-	Music Producer<br /><br />
-    <a href="hire.html">Hire me</a>
-  </div>
+    <div class="main-container">
+        <div class="hero-section">
+            <div class="content"
+                data-lang-en="Feymi/SARKA<br />Thessaloniki<br /><br />Graphic Designer<br />Music Producer<br /><br /><a href='hire.html'>Hire me</a>"
+                data-lang-gr="Φεϊμί/ΣΑΡΚΑ<br />Θεσσαλονίκη<br /><br />Γραφίστας<br />Μουσικός Παραγωγός<br /><br /><a href='hire.html'>Προσλάβετέ με</a>">
+                Feymi/SARKA<br />Thessaloniki<br /><br />Graphic Designer<br />Music Producer<br /><br />
+                <a href="hire.html">Hire me</a>
+            </div>
 
-  <div class="content2">SKG</div>
+            <div class="video-wrapper">
+                <video src="https://www.dropbox.com/scl/fi/s3yd488wt64mjq6r4ny0r/hire-me-html-video.mp4?rlkey=9bsrxcz82g8cwd4k56y1t7kma&st=zx68rc0c&raw=1" autoplay muted loop playsinline></video>
+            </div>
+        </div>
 
-  <div class="lang-switch">
-    <span class="lang lang-active">EN</span> / <span class="lang">GR</span>
-  </div>
+        <section class="bio-section">
+            <div class="bio-header" data-lang-en="Biography" data-lang-gr="Βιογραφία">Biography</div>
+            <div class="bio-text" 
+                 data-lang-en="Born and raised in Thessaloniki, Greece, Feymi Mustafa Oğlu’s creative journey began long before his formal education. <br /><br />Falling in love with graphic design at age 10, he spent his formative years blurring the lines between visual aesthetics and sonic experimentation. <br /><br />By age 15, adopting the alias “SARKA” (the Greek word for flesh) he began producing experimental house music, finding a raw, rhythmic language that would eventually become the heartbeat of his design philosophy. <br /><br />Feymi’s professional path was cemented early, graduating from a Vocational High School in Graphic Design before earning his  bachelor's degree from the AKTO Arts & Designs College of Thessaloniki at 21. <br /><br />Since stepping into the industry, he has carved out a distinct visual identity characterized by bold experimentation and a relentless attention to detail. <br /><br />This unique approach caught the eyes of major national brands, rapidly establishing him as a prominent figure within the Greek design community. <br /><br />In 2036, his creative excellence was formally recognized with his first ΕΒΓΕ award, a milestone that signaled the beginning of a decorated career. <br /><br />Today, Feymi continues to push the boundaries of visual communication, transforming abstract concepts into visceral, high-impact design experiences." 
+                 data-lang-gr="Γεννημένος και μεγαλωμένος στη Θεσσαλονίκη, το δημιουργικό ταξίδι του Φεϊμί Μουσταφά Ογλού ξεκίνησε πολύ πριν από την τυπική του εκπαίδευση. <br /><br />Ερωτευμένος με τη γραφιστική από την ηλικία των 10 ετών, πέρασε τα διαμορφωτικά του χρόνια θολώνοντας τα όρια μεταξύ οπτικής αισθητικής και ηχητικού πειραματισμού. <br /><br />Στην ηλικία των 15 ετών, υιοθετώντας το ψευδώνυμο “SARKA”, άρχισε να παράγει πειραματική house μουσική, βρίσκοντας μια ωμή, ρυθμική γλώσσα που θα γινόταν τελικά ο χτύπος της καρδιάς της σχεδιαστικής του φιλοσοφίας. <br /><br />Η επαγγελματική πορεία του Φεϊμί εδραιώθηκε νωρίς, αποφοιτώντας από το Επαγγελματικό Λύκειο Γραφικών Τεχνών πριν πάρει το πτυχίο του από το κολέγιο AKTO Arts & Designs στη Θεσσαλονίκη σε ηλικία 21 ετών. <br /><br />Από τότε που εισήλθε στον κλάδο, έχει χαράξει μια ξεχωριστή οπτική ταυτότητα που χαρακτηρίζεται από τολμηρό πειραματισμό και αμείωτη προσοχή στη λεπτομέρεια. <br /><br />Αυτή η μοναδική προσέγγιση τράβηκε τα βλέμματα μεγάλων εθνικών brands, καθιερώνοντάς τον γρήγορα ως εξέχουσα προσωπικότητα στην ελληνική κοινότητα σχεδιασμού. <br /><br />Το 2036, η δημιουργική του υπεροχή αναγνωρίστηκε επίσημα με το πρώτο του βραβείο ΕΒΓΕ, ένα ορόσημο που σηματοδότησε την αρχή μιας διακεκριμένης καριέρας. <br /><br />Σήμερα, ο Φεϊμί συνεχίζει να διευρύνει τα όρια της οπτικής επικοινωνίας, μετατρέποντας αφηρημένες έννοιες σε ενστικτώδεις, υψηλής έντασης εμπειρίες σχεδιασμού.">
+                Born and raised in Thessaloniki, Greece, Feymi Mustafa Oğlu’s creative journey began long before his formal education. <br /><br />Falling in love with graphic design at age 10, he spent his formative years blurring the lines between visual aesthetics and sonic experimentation. <br /><br />By age 15, adopting the alias “SARKA” (the Greek word for flesh) he began producing experimental house music, finding a raw, rhythmic language that would eventually become the heartbeat of his design philosophy.
+				<br /><br />Feymi’s professional path was cemented early, graduating from a Vocational High School in Graphic Design before earning his  bachelor's degree from the AKTO Arts & Designs College of Thessaloniki at 21. <br /><br />Since stepping into the industry, he has carved out a distinct visual identity characterized by bold experimentation and a relentless attention to detail. <br /><br />This unique approach caught the eyes of major national brands, rapidly establishing him as a prominent figure within the Greek design community. <br /><br />In 2036, his creative excellence was formally recognized with his first ΕΒΓΕ award, a milestone that signaled the beginning of a decorated career. <br /><br />Today, Feymi continues to push the boundaries of visual communication, transforming abstract concepts into visceral, high-impact design experiences.
+            </div>
+        </section>
+    </div>
 
-  <div class="video-wrapper">
-    <video src="https://www.dropbox.com/scl/fi/s3yd488wt64mjq6r4ny0r/hire-me-html-video.mp4?rlkey=9bsrxcz82g8cwd4k56y1t7kma&st=zx68rc0c&raw=1" autoplay muted loop playsinline></video>
-  </div>
+	<div class="lang-switch">
+		<span class="lang lang-active">EN</span> /
+		<span class="lang">GR</span>
+	</div>
 
-<script>
-  const body = document.body;
-  let lastX = 0, lastY = 0;
-  const moveThreshold = 20;
+	<script>
+		const nav = document.querySelector('.top-nav');
+		window.addEventListener('scroll', () => {
+			nav.classList.toggle('hidden', window.scrollY > 50);
+		});
 
-  function switchTheme() {
-    body.classList.toggle('light-theme');
-    body.classList.toggle('dark-theme');
-  }
+		function switchTheme() { 
+            document.body.classList.toggle('light-theme'); 
+            document.body.classList.toggle('dark-theme'); 
+        }
+		
+        // Mobile-only scroll theme switching with sensitivity control
+if (('ontouchstart' in window) || (navigator.maxTouchPoints > 0)) { 
+let lastSwitchTime = 0; 
+const throttleDelay = 100; // Adjust this: higher number = less sensitive (slower)
 
-  // --- INITIAL SETUP ---
-  body.classList.add('light-theme');
-  body.classList.remove('dark-theme');
-
-  // --- DESKTOP: MOUSE MOVE TRIGGER ---
-  window.addEventListener('mousemove', (event) => {
-    const distance = Math.hypot(event.clientX - lastX, event.clientY - lastY);
-    if (distance > moveThreshold) {
-      switchTheme();
-      lastX = event.clientX;
-      lastY = event.clientY;
+window.addEventListener('scroll', () => {
+    const now = Date.now();
+    if (now - lastSwitchTime > throttleDelay) {
+        switchTheme();
+        lastSwitchTime = now;
     }
-  });
+}, { passive: true });
+}
 
-  // --- MOBILE: AUTOMATIC STROBE ---
-  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
-  if (isTouchDevice) {
-    // STROBE SPEED SETTING: 200 is 200 milliseconds (5 times per second)
-    // Decrease for faster, increase for slower.
-    setInterval(switchTheme, 200); 
-  }
+		document.querySelectorAll('.lang').forEach(el => {
+		  el.addEventListener('click', function() {
+		    document.querySelector('.lang-active').classList.remove('lang-active');
+		    this.classList.add('lang-active');
+		    const lang = this.textContent.trim().toLowerCase();
+            
+		    const labels = document.querySelector('.top-nav').getAttribute(`data-lang-${lang}`).split(",");
+		    document.querySelectorAll('.top-nav a').forEach((a, i) => a.textContent = labels[i]);
+            
+		    document.querySelector('.content').innerHTML = document.querySelector('.content').getAttribute('data-lang-' + lang);
 
-  // --- LANGUAGE SWITCHER (YOUR ORIGINAL CODE) ---
-  document.querySelectorAll('.lang-switch .lang').forEach(function(el) {
-    el.addEventListener('click', function() {
-      // Handles the EN/GR button styling
-      document.querySelector('.lang-active').classList.remove('lang-active');
-      this.classList.add('lang-active');
-      const lang = this.textContent.trim().toLowerCase();
-      
-      // Updates the Top Nav links (Home, Music, Portfolio)
-      const nav = document.querySelector('.top-nav');
-      const labels = nav.getAttribute(`data-lang-${lang}`)?.split(",");
-      if (labels && labels.length === 3) {
-        const links = nav.querySelectorAll('a');
-        links.forEach((link, i) => {
-          link.textContent = labels[i];
-        });
-      }
-  
-      // Updates the main text content (Feymi/SARKA...)
-      const contentEl = document.querySelector('.content');
-      const newHtml = contentEl.getAttribute('data-lang-' + lang);
-      if (newHtml) contentEl.innerHTML = newHtml;
-    });
-  });
-</script>
-
+            document.querySelector('.bio-header').textContent = document.querySelector('.bio-header').getAttribute('data-lang-' + lang);
+            document.querySelector('.bio-text').innerHTML = document.querySelector('.bio-text').getAttribute('data-lang-' + lang);
+		  });
+		});
+	</script>
 </body>
 </html>
