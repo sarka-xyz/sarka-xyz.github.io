@@ -1,351 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Music | SARKA</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&display=swap" rel="stylesheet">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      font-family: "Roboto Flex", sans-serif;
-      font-weight: 650;
-      font-stretch: 151%;
-      letter-spacing: -0.05em;
-      transition: background-color 0.1s ease, color 0.1s ease;
-      position: relative;
-      background-color: #ffffff;
-      color: #000000;
-      user-select: none;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Music | SARKA</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0; padding: 0; width: 100%; min-height: 100vh;
+            font-family: "Roboto Flex", sans-serif; font-weight: 650;
+            font-stretch: 151%; letter-spacing: -0.05em;
+            transition: background-color 0.1s ease, color 0.1s ease;
+            overflow-x: hidden;
+        }
 
-    .light-theme {
-      background-color: #ffffff;
-      color: #000000;
-    }
+        /* Theme Styles */
+        .light-theme { background-color: #FFF200; color: #1200FF; }
+        .dark-theme { background-color: #1200FF; color: #FFF200; }
+        .light-theme .logo { filter: invert(1); }
 
-    .dark-theme {
-      background-color: #000000;
-      color: #ffffff;
-    }
+        /* Navigation */
+        .top-nav {
+            position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 4rem; font-size: 1.1rem; z-index: 100;
+            transition: opacity 0.3s ease; user-select: none;
+        }
+        .top-nav.hidden { opacity: 0; pointer-events: none; }
+        .top-nav a { color: inherit; text-decoration: none; }
 
-    .logo {
-      position: absolute;
-      top: 30px;
-      left: 40px;
-      height: 1.5rem;
-      pointer-events: none;
-    }
+        .logo { position: fixed; top: 30px; left: 40px; height: 1.5rem; z-index: 101; }
+        .lang-switch { position: fixed; top: 30px; right: 40px; z-index: 101; cursor: pointer; }
+        .lang-active { text-decoration: underline; }
 
-    .light-theme .logo {
-      filter: invert(1);
-    }
+        /* Music Grid */
+        .music-grid {
+            padding: 150px 40px 50px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            max-width: 1200px; margin: 0 auto;
+        }
+        .release { display: flex; flex-direction: column; align-items: center; }
+        .release img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 4px; }
+        .release a { color: inherit; text-decoration: none; }
+        .album-title { margin-top: 0.5rem; text-decoration: underline; }
 
-    .dark-theme .logo {
-      filter: invert(0);
-    }
-
-    .lang-switch {
-      position: absolute;
-      top: 30px;
-      right: 40px;
-      color: inherit;
-    }
-
-    .lang {
-      cursor: pointer;
-      padding: 0 4px;
-    }
-
-    .lang-active {
-      text-decoration: underline;
-    }
-
-    .lang:hover {
-      opacity: 0.7;
-    }
-
-    .top-nav {
-      position: fixed;
-      top: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 4rem;
-      font-size: 1.1rem;
-      font-weight: 650;
-      z-index: 10;
-      user-select: none;
-    }
-
-    .top-nav a {
-      color: inherit;
-      text-decoration: none;
-      transition: opacity 0.2s ease;
-    }
-
-    .top-nav a:hover {
-      opacity: 0.7;
-    }
-
-    .music-grid {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 1200px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2rem;
-      text-align: center;
-      font-size: 1rem;
-    }
-
-    .release {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .release img {
-      background: #7fc144;
-      width: 100%;
-      aspect-ratio: 4/4;
-      object-fit: cover;
-      border-radius: 6px;
-      transition: filter 0.2s ease;
-    }
-
-    .light-theme .release img {
-      filter: invert(0);
-    }
-
-    .dark-theme .release img {
-      filter: invert(1);
-    }
-
-    .release span {
-      margin-top: 0.5rem;
-    }
-
-    .content2 {
-      position: absolute;
-      bottom: 50px;
-      right: 40px;
-      font-size: 0.8rem;
-      line-height: 1.6;
-      color: inherit;
-      pointer-events: none;
-    }
-  </style>
-
-  <style>
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100vh; /* Changed from height: 100vh to allow scrolling on small phones */
-    font-family: "Roboto Flex", sans-serif;
-    font-weight: 650;
-    font-stretch: 151%;
-    letter-spacing: -0.05em;
-    transition: background-color 0.1s ease, color 0.1s ease;
-    position: relative;
-    overflow-x: hidden; /* Prevent horizontal wobbling */
-  }
-
-  /* Desktop layout (default) */
-  .top-nav {
-    position: fixed;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 4rem;
-    font-size: 1.1rem;
-    z-index: 10;
-    user-select: none;
-  }
-
-  .top-nav a {
-    color: inherit;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-  }
-
-  .content {
-    position: absolute;
-    top: 50%;
-    left: 25vw;
-    transform: translate(-50%, -50%);
-    text-align: left;
-    line-height: 1.5;
-    font-size: 1.8rem;
-    user-select: none;
-  }
-
-  .video-wrapper {
-    position: absolute;
-    top: 50%;
-    left: 75vw;
-    transform: translate(-50%, -50%);
-    width: 40vw;
-    max-width: 600px;
-    aspect-ratio: 16 / 9;
-    overflow: hidden;
-    pointer-events: none;
-    border-radius: 6px;
-  }
-
-  /* ... Keep your existing .logo, .lang-switch, and theme classes ... */
-  .logo { position: absolute; top: 30px; left: 40px; height: 1.5rem; z-index: 11; }
-  .lang-switch { position: absolute; top: 30px; right: 40px; z-index: 11; cursor: pointer; }
-  .content2 { position: fixed; bottom: 20px; right: 20px; font-size: 0.8rem; opacity: 0.5; }
-  .video-wrapper video { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
-  .light-theme { background-color: #ffffff; color: #000000; }
-  .dark-theme { background-color: #000000; color: #ffffff; }
-  .light-theme .video-wrapper video, .light-theme .logo { filter: invert(1); }
-  .lang-active { text-decoration: underline; }
-
-  /* MOBILE RESPONSIVENESS */
-  @media (max-width: 768px) {
-    html, body {
-      overflow-y: auto; /* Allow scrolling on mobile */
-    }
-
-    .top-nav {
-      top: 80px; /* Move nav down to avoid hitting the logo/lang-switch */
-      gap: 1.5rem;
-      width: 100%;
-      justify-content: center;
-    }
-
-    .content {
-      position: relative;
-      top: 0;
-      left: 0;
-      transform: none;
-      margin: 140px 40px 40px 40px; /* Spacing for the header */
-      font-size: 1.4rem;
-      width: auto;
-    }
-
-    .video-wrapper {
-      position: relative;
-      top: 0;
-      left: 0;
-      transform: none;
-      width: calc(100% - 80px); /* Full width minus margins */
-      margin: 0 40px 100px 40px;
-      max-width: none;
-    }
-    
-    .logo { left: 20px; top: 20px; }
-    .lang-switch { right: 20px; top: 20px; }
-  }
-</style>
-
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .top-nav { top: 80px; gap: 1.5rem; }
+            .music-grid { 
+                grid-template-columns: 1fr; 
+                gap: 2rem; 
+                padding-top: 150px;
+            }
+            .release { 
+                flex-direction: row; 
+                align-items: center; 
+                gap: 1.5rem; 
+            }
+            .release img { width: 100px; height: 100px; }
+            .album-title { text-decoration: underline; font-size: 1.2rem; }
+        }
+    </style>
 </head>
-<body class="light-theme">
-  <img src="sarka-logo.svg" alt="SARKA logo" class="logo" />
+<body class="dark-theme">
+    <img src="sarka-logo.svg" alt="SARKA logo" class="logo" />
+    <nav class="top-nav" data-lang-en="Home,Music,Portfolio" data-lang-gr="Αρχική,Μουσική,Πορτφόλιο">
+        <a href="index.html">Home</a>
+        <a href="music.html">Music</a>
+        <a href="https://www.behance.net/feimixyz" target="_blank" rel="noopener">Portfolio</a>
+    </nav>
 
-  <nav class="top-nav" data-lang-en="Home,Music,Portfolio" data-lang-gr="Αρχική,Μουσική,Πορτφόλιο">
-    <a href="index.html">Home</a>
-    <a href="music.html">Music</a>
-    <a href="https://www.behance.net/feimixyz" target="_blank" rel="noopener">Portfolio</a>
-  </nav>
-
-  <div class="lang-switch">
-    <span class="lang lang-active">EN</span> / <span class="lang">GR</span>
-  </div>
-
-  <div class="music-grid">
-    <div class="release">
-      <a href="https://push.fm/fl/nocost"><img src="NC.jpg" alt="cover art" /></a>
-      <span>No Cost</span>
+    <div class="music-grid">
+        <!-- Reusable function for release structure -->
+        <div class="release">
+            <a href="https://push.fm/fl/nocost"><img src="NC.jpg" alt="No Cost" /></a>
+            <a href="https://push.fm/fl/nocost" class="album-title">No Cost</a>
+        </div>
+        <div class="release">
+            <a href="https://push.fm/fl/hmih"><img src="HMIH.jpg" alt="Haus Made in Haus" /></a>
+            <a href="https://push.fm/fl/hmih" class="album-title">Haus Made in Haus</a>
+        </div>
+        <div class="release">
+            <a href="https://push.fm/fl/xuuxz"><img src="xuuxz.jpg" alt="xuuxz" /></a>
+            <a href="https://push.fm/fl/xuuxz" class="album-title">xuuxz</a>
+        </div>
+        <div class="release">
+            <a href="https://push.fm/fl/dk-sg"><img src="DKSG.jpg" alt="Deli Kız/Sinin Geliyor" /></a>
+            <a href="https://push.fm/fl/dk-sg" class="album-title">Deli Kız/Sinin Geliyor</a>
+        </div>
     </div>
-    <div class="release">
-      <a href="https://push.fm/fl/hmih"><img src="HMIH.jpg" alt="cover art" /></a>
-      <span>Haus Made in Haus</span>
+
+    <div class="lang-switch">
+        <span class="lang lang-active">EN</span> / <span class="lang">GR</span>
     </div>
-    <div class="release">
-      <a href="https://push.fm/fl/xuuxz"><img src="xuuxz.jpg" alt="cover art" /></a>
-      <span>xuuxz</span>
-    </div>
-    <div class="release">
-      <a href="https://push.fm/fl/dk-sg"><img src="DKSG.jpg" alt="cover art" /></a>
-      <span>Deli Kız/Sinin Geliyor</span>
-    </div>
-  </div>
 
-  <div class="content2">SKG</div>
+    <script>
+        // Scroll & Theme logic as used in index.html[span_1](start_span)[span_1](end_span)
+        const nav = document.querySelector('.top-nav');
+        window.addEventListener('scroll', () => { nav.classList.toggle('hidden', window.scrollY > 50); });
 
-  <script>
-  const body = document.body;
-  let lastX = 0, lastY = 0;
-  const moveThreshold = 20;
+        function switchTheme() { 
+            document.body.classList.toggle('light-theme'); 
+            document.body.classList.toggle('dark-theme'); 
+        }
 
-  function switchTheme() {
-    body.classList.toggle('light-theme');
-    body.classList.toggle('dark-theme');
-  }
+        if (('ontouchstart' in window) || (navigator.maxTouchPoints > 0)) { 
+            setInterval(switchTheme, 200);
+        }
 
-  // --- INITIAL SETUP ---
-  body.classList.add('light-theme');
-  body.classList.remove('dark-theme');
-
-  // --- DESKTOP: MOUSE MOVE TRIGGER ---
-  window.addEventListener('mousemove', (event) => {
-    const distance = Math.hypot(event.clientX - lastX, event.clientY - lastY);
-    if (distance > moveThreshold) {
-      switchTheme();
-      lastX = event.clientX;
-      lastY = event.clientY;
-    }
-  });
-
-  // --- MOBILE: AUTOMATIC STROBE ---
-  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-
-  if (isTouchDevice) {
-    // STROBE SPEED SETTING: 200 is 200 milliseconds (5 times per second)
-    // Decrease for faster, increase for slower.
-    setInterval(switchTheme, 200); 
-  }
-
-  // --- LANGUAGE SWITCHER (YOUR ORIGINAL CODE) ---
-  document.querySelectorAll('.lang-switch .lang').forEach(function(el) {
-    el.addEventListener('click', function() {
-      // Handles the EN/GR button styling
-      document.querySelector('.lang-active').classList.remove('lang-active');
-      this.classList.add('lang-active');
-      const lang = this.textContent.trim().toLowerCase();
-      
-      // Updates the Top Nav links (Home, Music, Portfolio)
-      const nav = document.querySelector('.top-nav');
-      const labels = nav.getAttribute(`data-lang-${lang}`)?.split(",");
-      if (labels && labels.length === 3) {
-        const links = nav.querySelectorAll('a');
-        links.forEach((link, i) => {
-          link.textContent = labels[i];
+        document.querySelectorAll('.lang').forEach(el => {
+            el.addEventListener('click', function() {
+                const lang = this.textContent.trim().toLowerCase();
+                localStorage.setItem('userLanguage', lang);
+                location.reload(); // Simple refresh to apply labels
+            });
         });
-      }
-  
-      // Updates the main text content (Feymi/SARKA...)
-      const contentEl = document.querySelector('.content');
-      const newHtml = contentEl.getAttribute('data-lang-' + lang);
-      if (newHtml) contentEl.innerHTML = newHtml;
-    });
-  });
-</script>
-
+    </script>
 </body>
 </html>
-
-
