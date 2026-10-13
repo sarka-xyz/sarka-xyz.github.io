@@ -114,25 +114,38 @@
 			nav.classList.toggle('hidden', window.scrollY > 50);
 		});
 
-		function switchTheme() { 
-            document.body.classList.toggle('light-theme'); 
-            document.body.classList.toggle('dark-theme'); 
+		function switchTheme() {
+            document.body.classList.toggle('light-theme');
+            document.body.classList.toggle('dark-theme');
         }
-		
-        if (('ontouchstart' in window) || (navigator.maxTouchPoints > 0)) { 
-            let lastSwitchTime = 0; 
-            const throttleDelay = 100;
-            window.addEventListener('scroll', () => {
-                const now = Date.now();
-                if (now - lastSwitchTime > throttleDelay) {
+
+        function flashWhileActive(eventName) {
+            let flashInterval;
+            let idleTimeout;
+            const startFlashing = () => {
+                if (!flashInterval) {
                     switchTheme();
-                    lastSwitchTime = now;
+                    flashInterval = window.setInterval(switchTheme, 120);
                 }
-            }, { passive: true });
+                window.clearTimeout(idleTimeout);
+                idleTimeout = window.setTimeout(() => {
+                    window.clearInterval(flashInterval);
+                    flashInterval = undefined;
+                }, 180);
+            };
+            window.addEventListener(eventName, startFlashing, { passive: true });
+        }
+
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+            flashWhileActive('pointermove');
+        } else {
+            flashWhileActive('scroll');
         }
 
         function setLanguage(lang) {
+            lang = lang === 'gr' ? 'gr' : 'en';
             localStorage.setItem('userLanguage', lang);
+            document.documentElement.lang = lang;
             document.querySelectorAll('.lang').forEach(el => {
                 el.classList.toggle('lang-active', el.textContent.trim().toLowerCase() === lang);
             });
@@ -159,3 +172,4 @@
 	</script>
 </body>
 </html>
+
