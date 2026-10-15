@@ -7,6 +7,7 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,slnt,wdth,wght@8..144,-10..0,25..151,100..1000&display=swap" rel="stylesheet">
     <style>
+        *, *::before, *::after { box-sizing: border-box; }
         html, body {
             margin: 0; padding: 0; width: 100%; min-height: 100vh;
             font-family: "Roboto Flex", sans-serif; font-weight: 650;
@@ -35,32 +36,42 @@
 
         /* Music Grid */
         .music-grid {
-            padding: 150px 40px 50px;
+            width: min(55vw, 1040px);
+            padding: 150px 0 50px;
+            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            max-width: 1200px; margin: 0 auto;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 3rem 60px;
         }
-        .release { display: flex; flex-direction: column; align-items: center; }
-        .release img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 4px; }
+        .release { display: flex; flex-direction: column; align-items: flex-start; }
+        .release > a:first-child { display: block; width: 100%; }
+        .release img {
+            display: block; width: 100%; aspect-ratio: 1/1; object-fit: cover;
+            border-radius: 4px; transform-origin: center;
+            transition: transform 240ms cubic-bezier(.2,.75,.25,1);
+        }
+        .release > a:first-child:hover img,
+        .release > a:first-child:focus-visible img { transform: translateY(-6px) scale(1.025); }
         .release a { color: inherit; text-decoration: none; }
-        .album-title { margin-top: 0.5rem; text-decoration: underline; }
+        .album-title { margin-top: 0.75rem; text-decoration: underline; }
+        .release.hmih { order: 1; }
+        .release.no-cost { order: 2; }
+        @media (prefers-reduced-motion: reduce) {
+            .release img { transition: none; }
+        }
 
         /* Mobile Adjustments */
         @media (max-width: 768px) {
             .top-nav { top: 80px; gap: 1.5rem; }
-            .music-grid { 
-                grid-template-columns: 1fr; 
-                gap: 2rem; 
-                padding-top: 150px;
+            .music-grid {
+                width: min(75vw, 500px);
+                grid-template-columns: 1fr;
+                gap: 3rem;
+                padding-top: 180px;
             }
-            .release { 
-                flex-direction: row; 
-                align-items: center; 
-                gap: 1.5rem; 
-            }
-            .release img { width: 100px; height: 100px; }
-            .album-title { text-decoration: underline; font-size: 1.2rem; }
+            .release.no-cost { order: 1; }
+            .release.hmih { order: 2; }
+            .album-title { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -74,22 +85,15 @@
 
     <div class="music-grid">
         <!-- Reusable function for release structure -->
-        <div class="release">
+        <div class="release no-cost">
             <a href="https://push.fm/fl/nocost"><img src="NC.jpg" alt="No Cost" /></a>
             <a href="https://push.fm/fl/nocost" class="album-title">No Cost</a>
         </div>
-        <div class="release">
+        <div class="release hmih">
             <a href="https://push.fm/fl/hmih"><img src="HMIH.jpg" alt="Haus Made in Haus" /></a>
-            <a href="https://push.fm/fl/hmih" class="album-title">Haus Made in Haus</a>
+            <a href="https://push.fm/fl/hmih" class="album-title">Haus Made In Haus</a>
         </div>
-        <div class="release">
-            <a href="https://push.fm/fl/xuuxz"><img src="xuuxz.jpg" alt="xuuxz" /></a>
-            <a href="https://push.fm/fl/xuuxz" class="album-title">xuuxz</a>
-        </div>
-        <div class="release">
-            <a href="https://push.fm/fl/dk-sg"><img src="DKSG.jpg" alt="Deli Kız/Sinin Geliyor" /></a>
-            <a href="https://push.fm/fl/dk-sg" class="album-title">Deli Kız/Sinin Geliyor</a>
-        </div>
+
     </div>
 
     <div class="lang-switch">
@@ -148,4 +152,5 @@
     </script>
 </body>
 </html>
+
 
